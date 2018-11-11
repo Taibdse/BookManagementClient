@@ -1,0 +1,42 @@
+.card.card-form{
+    width: 400px;
+    margin: 100px auto;
+    border-radius: 15px;
+    background-color: rgba(0,0,0,0.1);
+    padding: 10px;
+    position: relative;
+}
+
+form{
+    width: 100%;
+}
+
+form input{
+    border-radius: 20px;
+}
+
+.icon-book{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: teal;
+    color: white;
+    text-align: center;
+    padding: 0;
+}
+
+.icon.fa.fa-book{
+    font-size: 3em;
+    line-height: 80px;
+}
+
+.btn{
+    border-radius: 15px;
+}
+.invalid-login-message{
+    color: rgb(241, 109, 109);
+}

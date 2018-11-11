@@ -1,0 +1,18 @@
+<table class="table table-striped table-hover table-condensed text-center">
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Ten the loai</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cate of arrCategories; let i = index">
+      <td>{{i+1}}</td>
+      <td>{{cate.Name}}</td>
+      <td>
+        <button class="btn btn-warning btn-sm">Cap nhat</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

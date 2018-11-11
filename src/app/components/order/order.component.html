@@ -1,0 +1,41 @@
+<div class="table-responsive">
+  <table class="table table-striped table-hover table-condensed text-center" style="min-width: 1200px;">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Ngay</th>
+        <th>Nguoi dat hang</th>
+        <th>Dia chi</th>
+        <th>So dien thoai</th>
+        <th>Email</th>
+        <th>So luong</th>
+        <th>Trang thai</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of arrOrdersList; let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{order.OrderDate}}</td>
+        <td>{{order.Name}}</td>
+        <td>
+          {{ order.Address }}
+        </td>
+        <td>{{order.PhoneNumber}}</td>
+        <td>{{order.Email}}</td>
+        <td>{{order.Amount}}</td>
+        <td>{{order.Status}}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="showEditForm(book)">
+            <i class="fa fa-pencil"></i> Cap nhat
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="confirmRemove(book)">
+            <i class="fa fa-times"></i> Xoa
+          </button>
+          <button class="btn btn-info btn-sm " (click)="showDetails(book)">
+            <i class="fa fa-info"></i> Chi tiet
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

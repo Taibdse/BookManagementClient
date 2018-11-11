@@ -1,0 +1,36 @@
+<h1 class="text-center py-2 bg-warning">
+  <i class="fa fa-book"></i> Phan mem quan ly cua hang sach
+</h1>
+<div class="row">
+  <div class="col-12">
+    <div class="card card-form">
+      <div class="icon-book"><i class="fa fa-book icon"></i></div>
+      <div class="card-body">
+        <form [formGroup]="loginForm" (submit)="login($event)" >
+          <div class="form-group">
+            <label for="">Ten nguoi dung</label>
+            <input type="text" class="form-control" placeholder="Nhap ten..." formControlName="username">
+            <div *ngIf="submitted && f.username.errors" class="invalid-login-message">
+                <div *ngIf="f.username.errors.required">Ten nguoi dung khong duoc de trong</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="">Mat khau</label>
+            <input type="password" class="form-control" placeholder="Nhap mat khau..." formControlName="password">
+            <div *ngIf="submitted && f.password.errors" class="invalid-login-message">
+              <div *ngIf="f.password.errors.required">Mat khau hong duoc de trong</div>
+              <div *ngIf="f.password.errors.minlength">Mat khau phai co it nhat 6 ki tu</div>
+            </div>
+          </div>
+
+          <button class="btn btn-success pull-right mt-3" style="margin-left: 10px" type="submit">Dang nhap</button>
+          <button class="btn btn-grey pull-right mt-3" type="reset">Xoa</button>
+        </form>
+       
+        <div class="clearfix"></div>
+        <a href="" class="mt-3" style="display: inline-block">Quen mat khau?</a>
+      </div>
+    </div>
+  </div>
+</div>

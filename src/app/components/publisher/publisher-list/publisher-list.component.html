@@ -1,0 +1,21 @@
+<table class="table table-striped table-hover table-condensed text-center">
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Ten nha xuat ban</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let publisher of arrPublishers; let i = index">
+      <td>{{i + 1}}</td>
+      <td>{{publisher.Name}}</td>
+      <td>
+        <button class="btn btn-warning btn-sm">Cap nhat</button>
+        <button class="btn btn-danger btn-sm">Xoa</button>
+        <button class="btn btn-info btn-sm">Chi tiet</button>
+      </td>
+    </tr>
+  
+  </tbody>
+</table>

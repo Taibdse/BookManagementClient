@@ -1,0 +1,384 @@
+<h2 class="text-center bg-primary py-2 my-4">
+  <i class=" fa fa-book"></i> Quan ly kho sach
+</h2>
+
+<div class="card my-3">
+  <div class="card-header">
+    <h4>
+      <i class="fa fa-filter"></i> Tim kiem nhanh
+    </h4>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="">Ten sach</label>
+          <input type="text" class="form-control" (keyup)="filterBooks()" [(ngModel)]="filterObj.bookName">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="">The loai</label>
+          <select class="form-control" (change)="filterBooks()" [(ngModel)]="filterObj.cateID">
+            <option value="0">Tat ca</option>
+            <option [value]="c.ID" *ngFor="let c of arrCategories">{{ c.Name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="">Nha xuat ban</label>
+          <select class="form-control" (change)="filterBooks()" [(ngModel)]="filterObj.publisherID">
+            <option value="0">Tat ca</option>
+            <option [value]="p.ID" *ngFor="let p of arrPublishers">{{ p.Name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="">Tac gia</label>
+          <select class="form-control" (change)="filterBooks()" [(ngModel)]="filterObj.authorID">
+            <option value="0">Tat ca</option>
+            <option [value]="a.ID" *ngFor="let a of arrAuthors">{{ a.Name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="">So luong</label>
+        <div class="row">
+          <div class="col-6">
+            <input type="number" class="form-control" placeholder="Tu" (keyup)="filterBooks()" [(ngModel)]="filterObj.quantityFrom">
+          </div>
+          <div class="col-6">
+            <input type="number" class="form-control" placeholder="Den" (keyup)="filterBooks()" [(ngModel)]="filterObj.quantityTo">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="">Gia</label>
+          <div class="row">
+            <div class="col-6">
+              <input type="number" class="form-control" placeholder="Tu" (keyup)="filterBooks()" [(ngModel)]="filterObj.priceFrom">
+            </div>
+            <div class="col-6">
+              <input type="number" class="form-control" placeholder="Den" (keyup)="filterBooks()" [(ngModel)]="filterObj.priceTo">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row my-5">
+  <div class="col-md-8">
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+  <div class="col-md-4">
+    <button class="btn btn-success btn-block" (click)="showModalAddBook()">
+      <i class="fa fa-book"></i> Them sach moi
+    </button>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover table-condensed text-center" style="min-width: 1200px;">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Ten sach</th>
+        <th>The loai</th>
+        <th>Tac gia</th>
+        <th>Gia</th>
+        <th>So luong</th>
+        <th>Image</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of arrFilteredBooks | paginate: { itemsPerPage: 10, currentPage: currentPage }; let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{book.Name}}</td>
+        <td>{{book.CategoryName}}</td>
+        <td>
+          {{ book.AuthorNames.join(', ') }}
+        </td>
+        <td>{{book.Price}}.000d</td>
+        <td>{{book.Quantity}}</td>
+        <td>
+          <img [src]="book.Image" alt="" style="width: 80px; height: 120px">
+        </td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="showEditForm(book)">
+            <i class="fa fa-pencil"></i> Cap nhat
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="confirmRemove(book)">
+            <i class="fa fa-times"></i> Xoa
+          </button>
+          <button class="btn btn-info btn-sm " (click)="showDetails(book)">
+            <i class="fa fa-info"></i> Chi tiet
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- modal book details -->
+<div class="modal fade" id="modalBookDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ currentBook.Name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Nha xuat ban: </h6> {{ currentBook.PulisherName }}
+          </div>
+          <div class="col-md-6">
+            <h6>The loai sach: </h6> {{ currentBook.CategoryName }}
+          </div>
+          <div class="col-md-6">
+            <h6>Cac tac gia: </h6> {{ currentBook.AuthorNames?.join(', ') }}
+          </div>
+          <div class="col-md-6">
+            <h6>Ngay xuat ban: </h6> {{ currentBook.publishDate }}
+          </div>
+          <div class="col-md-6">
+            <h6>Ngay khoi tao: </h6> {{ currentBook.CreatedDate }}
+          </div>
+          <div class="col-md-6">
+            <h6>So luong hien tai: </h6> {{ currentBook.Quantity }}
+          </div>
+          <div class="col-md-6">
+            <h6>Gia: </h6> {{ currentBook.Price }}
+          </div>
+          <div class="col-md-6">
+            <h6>Hinh anh: </h6> {{ currentBook.Image }}
+          </div>
+          <div class="col-md-6">
+            <h6>Mo ta: </h6>{{ currentBook.Description }}
+          </div>
+          <div class="col-md-6">
+            <h6>Gioi thieu: </h6>{{ currentBook.Intro }}
+          </div>
+          <div class="col-md-6">
+            <h6>So trang: </h6>{{ currentBook.NumOfPages }}
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalUpdateBook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cap nhat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Ten sach</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Name">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Nha xuat ban</label>
+              <span>{{ currentBook.PulisherID }}</span>
+              <select class="form-control" [(ngModel)]="currentBook.PulisherID">
+                <option [value]="p.ID" *ngFor="let p of arrPublishers">{{ p.Name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="">The loai sach</label>
+            <span>{{ currentBook.CategoryID }}</span>
+            <select class="form-control" [(ngModel)]="currentBook.CategoryID">
+              <option [value]="c.ID" *ngFor="let c of arrCategories">{{ c.Name }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Ngay xuat ban</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.publishDate">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Ngay khoi tao</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.CreatedDate">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">So luong hien tai</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Quantity">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="">Gia (*.000d)</label>
+              <input type="text" placeholder="" [(ngModel)]="currentBook.Price" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                <label for="">So trang</label>
+                <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.NumOfPages">
+              </div>
+            </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Hinh anh</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Image">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Gioi thieu</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Intro">
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="">Cac tac gia</label>
+            <!-- {{ currentBook.AuthorIDs.join(', ') }} -->
+            <select class="form-control" [(ngModel)]="currentBook.AuthorIDs" multiple>
+              <option [value]="a.ID" *ngFor="let a of arrAuthors">{{ a.Name }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Mo ta</label>
+              <textarea type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Description" rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dong</button>
+        <button type="button" class="btn btn-success" (click)="updateBook()">Luu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAddBook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Them moi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Ten sach</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Name">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Nha xuat ban</label>
+              <select class="form-control" [(ngModel)]="currentBook.PulisherID">
+                <option [value]="p.ID" *ngFor="let p of arrPublishers">{{ p.Name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="">The loai sach</label>
+            <select class="form-control" [(ngModel)]="currentBook.CategoryID">
+              <option [value]="c.ID" *ngFor="let c of arrCategories">{{ c.Name }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Ngay xuat ban</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.publishDate">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Ngay khoi tao</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.CreatedDate">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">So luong hien tai</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Quantity">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Gia</label>
+              <input type="text" placeholder="" [(ngModel)]="currentBook.Price" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Hinh anh</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Image">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Gioi thieu</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Intro">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">So trang</label>
+              <input type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.NumOfPages">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="">Cac tac gia</label>
+            <select class="form-control" [(ngModel)]="currentBook.AuthorIDs" multiple>
+              <option [value]="a.ID" *ngFor="let a of arrAuthors">{{ a.Name }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Mo ta</label>
+              <textarea type="text" class="form-control" placeholder="" [(ngModel)]="currentBook.Description" rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dong</button>
+        <button type="button" class="btn btn-success" (click)="addBook()">Luu</button>
+      </div>
+    </div>
+  </div>
+</div>
